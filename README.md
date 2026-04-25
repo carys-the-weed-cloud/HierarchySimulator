@@ -188,7 +188,7 @@ The masses represented statistically rather than as individual agents, providing
 **Deliverables**:
 - Playable alpha with full UI
 - Interactive manipulation of all simulation objects
-- Real-time visualization of simulation state
+- Tick-based visualization of simulation state
 
 ### Phase 7: Politics & Power Systems (Weeks 29-34)
 **Goal**: Model political dynamics and hierarchy manipulation
