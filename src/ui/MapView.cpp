@@ -23,8 +23,8 @@ MapView::~MapView() = default;
 
 void MapView::initialize(Simulation* simulation) {
     m_simulation = simulation;
-    if (simulation && simulation->getScenario().worldMap) {
-        m_worldMap = simulation->getScenario().worldMap;
+    if (simulation && simulation->getScenario()) {
+        m_worldMap = simulation->getScenario()->getWorldMap();
         update();
     }
 }
@@ -57,25 +57,25 @@ void MapView::paintGL() {
 void MapView::renderRegions() {
     // Placeholder: In production, this would use Vulkan to render regions
     // with terrain colors and ownership overlays
-    const auto& regions = m_worldMap->getAllRegions();
+    const auto& regions = m_worldMap->getRegions();
     
     glBegin(GL_TRIANGLES);
     for (const auto& [id, region] : regions) {
         // Color based on terrain type
         switch (region.terrain) {
-            case TerrainType::Plains:
+            case Region::Terrain::Plains:
                 glColor3f(0.2f, 0.6f, 0.2f);
                 break;
-            case TerrainType::Forest:
+            case Region::Terrain::Forest:
                 glColor3f(0.1f, 0.4f, 0.1f);
                 break;
-            case TerrainType::Mountains:
+            case Region::Terrain::Mountains:
                 glColor3f(0.5f, 0.5f, 0.5f);
                 break;
-            case TerrainType::Desert:
+            case Region::Terrain::Desert:
                 glColor3f(0.8f, 0.7f, 0.4f);
                 break;
-            case TerrainType::Coastal:
+            case Region::Terrain::Coastal:
                 glColor3f(0.4f, 0.6f, 0.8f);
                 break;
             default:
@@ -83,9 +83,9 @@ void MapView::renderRegions() {
         }
         
         // Simple triangle representation for each region
-        glVertex2f(region.coordinates.first + m_panX, region.coordinates.second + m_panY);
-        glVertex2f(region.coordinates.first + 50 + m_panX, region.coordinates.second + m_panY);
-        glVertex2f(region.coordinates.first + 25 + m_panX, region.coordinates.second + 40 + m_panY);
+        glVertex2f(region.longitude * 10 + m_panX, region.latitude * 10 + m_panY);
+        glVertex2f(region.longitude * 10 + 50 + m_panX, region.latitude * 10 + m_panY);
+        glVertex2f(region.longitude * 10 + 25 + m_panX, region.latitude * 10 + 40 + m_panY);
     }
     glEnd();
 }
@@ -106,8 +106,8 @@ void MapView::mousePressEvent(QMouseEvent *event) {
     } else if (event->button() == Qt::RightButton) {
         // Select region on right click
         // TODO: Implement proper hit detection
-        if (m_worldMap && !m_worldMap->getAllRegions().empty()) {
-            auto firstRegion = m_worldMap->getAllRegions().begin();
+        if (m_worldMap && !m_worldMap->getRegions().empty()) {
+            auto firstRegion = m_worldMap->getRegions().begin();
             emit regionSelected(firstRegion->first);
         }
     }

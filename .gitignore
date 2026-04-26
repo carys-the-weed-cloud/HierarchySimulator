@@ -1,35 +1,31 @@
 ```
-# Build artifacts
-build/
-dist/
+# Compiled and build artifacts
 *.o
 *.obj
-*.a
-*.lib
+*.exe
 *.dll
 *.so
-*.dylib
-*.exe
+*.a
+*.out
 
 # Dependencies
-vendor/
+node_modules/
+venv/
+.venv/
+__pycache__/
+dist/
+build/
+target/
+.gradle/
 
-# CMake
-CMakeFiles/
-CMakeCache.txt
-cmake_install.cmake
-Makefile
-compile_commands.json
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# Logs
+# Logs and temp files
 *.log
 *.tmp
+*.swp
+
+# Editors
+.vscode/
+.idea/
 
 # Environment
 .env
@@ -41,7 +37,7 @@ coverage/
 htmlcov/
 .coverage
 
-# OS
+# System
 .DS_Store
 Thumbs.db
 ```

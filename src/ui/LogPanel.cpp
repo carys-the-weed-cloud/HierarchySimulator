@@ -30,7 +30,7 @@ void LogPanel::setupUi() {
     m_logText = new QTextEdit();
     m_logText->setReadOnly(true);
     m_logText->setLineWrapMode(QTextEdit::WidgetWidth);
-    m_logText->setMaximumBlockCount(1000); // Keep last 1000 lines
+    m_logText->document()->setMaximumBlockCount(1000); // Keep last 1000 lines
     m_layout->addWidget(m_logText);
     
     addLogEntry("Simulation log initialized.", false);

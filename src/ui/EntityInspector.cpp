@@ -120,7 +120,7 @@ void EntityInspector::clear() {
         delete item;
     }
     
-    m_regionLayout->addRow(new QLabel("No region selected"), nullptr);
+    m_regionLayout->addRow(new QLabel("No region selected"), new QLabel(""));
 }
 
 void EntityInspector::displayIndividual(const std::string& id) {
