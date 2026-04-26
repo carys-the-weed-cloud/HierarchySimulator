@@ -1,1 +1,22 @@
-Nothing needs to be added to .gitignore since only a README.md file was modified and no build artifacts, dependencies, or temporary files were detected in the changes.
+```
+# Build artifacts
+build/
+CMakeCache.txt
+CMakeFiles/
+
+# Compiler and build system
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dll
+*.dylib
+*.exe
+
+# CMake specific
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+```

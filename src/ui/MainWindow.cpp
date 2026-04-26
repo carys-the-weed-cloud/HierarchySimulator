@@ -90,13 +90,13 @@ void MainWindow::setupMenuBar() {
     QAction* playAction = simMenu->addAction("&Play");
     playAction->setShortcut(QKeySequence(Qt::Key_Space));
     connect(playAction, &QAction::triggered, [this]() {
-        if (m_simulation) m_simulation->setRunning(true);
+        if (m_simulation) m_simulation->resume();
     });
     
     QAction* pauseAction = simMenu->addAction("P&ause");
     pauseAction->setShortcut(QKeySequence(Qt::Key_P));
     connect(pauseAction, &QAction::triggered, [this]() {
-        if (m_simulation) m_simulation->setRunning(false);
+        if (m_simulation) m_simulation->pause();
     });
     
     simMenu->addSeparator();
@@ -129,23 +129,22 @@ void MainWindow::setupMenuBar() {
 void MainWindow::setupStatusBar() {
     QStatusBar* status = statusBar();
     
-    QLabel* tickLabel = new QLabel("Tick: 0");
-    status->addPermanentWidget(tickLabel);
+    m_tickLabel = new QLabel("Tick: 0");
+    status->addPermanentWidget(m_tickLabel);
     
-    QLabel* speedLabel = new QLabel("Speed: 1x");
-    status->addPermanentWidget(speedLabel);
+    m_speedLabel = new QLabel("Speed: 1x");
+    status->addPermanentWidget(m_speedLabel);
     
-    QLabel* stateLabel = new QLabel("Paused");
-    status->addPermanentWidget(stateLabel);
+    m_stateLabel = new QLabel("Paused");
+    status->addPermanentWidget(m_stateLabel);
     
-    // Connect to simulation updates
+    // Connect to simulation updates via stats callback
     if (m_simulation) {
-        connect(m_simulation.get(), &Simulation::tickChanged, 
-            [tickLabel](int tick) { tickLabel->setText(QString("Tick: %1").arg(tick)); });
-        connect(m_simulation.get(), &Simulation::speedChanged,
-            [speedLabel](int speed) { speedLabel->setText(QString("Speed: %1x").arg(speed)); });
-        connect(m_simulation.get(), &Simulation::stateChanged,
-            [stateLabel](bool running) { stateLabel->setText(running ? "Running" : "Paused"); });
+        m_simulation->onStatsUpdate([this](const SimulationStats& stats) {
+            QMetaObject::invokeMethod(this, [this, stats]() {
+                updateStatusBar(stats);
+            }, Qt::QueuedConnection);
+        });
     }
 }
 
@@ -170,7 +169,7 @@ void MainWindow::connectSignals() {
 
 void MainWindow::onTick() {
     if (m_simulation && m_simulation->isRunning()) {
-        m_simulation->tick();
+        m_simulation->step();
     }
 }
 
@@ -183,7 +182,11 @@ void MainWindow::onSpeedChanged(int ticksPerSecond) {
 
 void MainWindow::onSimulationToggled(bool running) {
     if (m_simulation) {
-        m_simulation->setRunning(running);
+        if (running) {
+            m_simulation->resume();
+        } else {
+            m_simulation->pause();
+        }
     }
 }
 
@@ -204,7 +207,9 @@ void MainWindow::loadScenario() {
         this, "Load Scenario", "", "Scenario Files (*.scenario);;All Files (*)");
     
     if (!fileName.isEmpty() && m_simulation) {
-        m_simulation->loadScenario(fileName.toStdString());
+        // Note: Scenario loading is handled by SimulationController
+        // This would need to be implemented based on your architecture
+        emit scenarioLoaded(fileName.toStdString());
     }
 }
 
@@ -213,7 +218,9 @@ void MainWindow::saveScenario() {
         this, "Save Scenario", "", "Scenario Files (*.scenario);;All Files (*)");
     
     if (!fileName.isEmpty() && m_simulation) {
-        m_simulation->saveScenario(fileName.toStdString());
+        // Note: Scenario saving is handled by SimulationController
+        // This would need to be implemented based on your architecture
+        emit scenarioSaved(fileName.toStdString());
     }
 }
 
@@ -223,6 +230,18 @@ void MainWindow::toggleFullScreen() {
         showFullScreen();
     } else {
         showNormal();
+    }
+}
+
+void MainWindow::updateStatusBar(const hiersim::SimulationStats& stats) {
+    if (m_tickLabel) {
+        m_tickLabel->setText(QString("Tick: %1").arg(stats.current_tick));
+    }
+    if (m_speedLabel) {
+        m_speedLabel->setText(QString("Speed: %1x").arg(static_cast<int>(stats.ticks_per_second)));
+    }
+    if (m_stateLabel) {
+        m_stateLabel->setText(m_simulation && m_simulation->isRunning() ? "Running" : "Paused");
     }
 }
 

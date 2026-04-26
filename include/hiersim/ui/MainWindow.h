@@ -3,11 +3,13 @@
 #include <QMainWindow>
 #include <QStackedWidget>
 #include <QTimer>
+#include <QLabel>
 #include <memory>
 #include <string>
 
 namespace hiersim {
     class Simulation;
+    struct SimulationStats;
 }
 
 namespace hiersim::ui {
@@ -29,6 +31,10 @@ namespace hiersim::ui {
         explicit MainWindow(std::shared_ptr<Simulation> sim, QWidget *parent = nullptr);
         ~MainWindow();
 
+    signals:
+        void scenarioLoaded(const std::string& fileName);
+        void scenarioSaved(const std::string& fileName);
+
     private slots:
         void onTick();
         void onSpeedChanged(int ticksPerSecond);
@@ -44,6 +50,7 @@ namespace hiersim::ui {
         void setupMenuBar();
         void setupStatusBar();
         void connectSignals();
+        void updateStatusBar(const hiersim::SimulationStats& stats);
 
         std::shared_ptr<Simulation> m_simulation;
         
@@ -57,6 +64,11 @@ namespace hiersim::ui {
         
         // Toolbars
         TimeControlWidget* m_timeControl;
+        
+        // Status bar labels
+        QLabel* m_tickLabel;
+        QLabel* m_speedLabel;
+        QLabel* m_stateLabel;
         
         QTimer m_tickTimer;
         bool m_isFullScreen;
