@@ -171,7 +171,7 @@ double PoliticsModule::calculateCoalitionSupport(const Coalition& coalition, con
     }
     
     // Add some randomness to represent political maneuvering
-    baseSupport += (Random::getInstance().nextDouble(0.0, 1.0) - 0.5) * 0.2;
+    baseSupport += (Random::instance().nextDouble(0.0, 1.0) - 0.5) * 0.2;
     
     return std::clamp(baseSupport, 0.0, 1.0);
 }

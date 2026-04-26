@@ -549,7 +549,7 @@ std::vector<std::string> LegislativeProcess::processVotes(
                 cost = law->implementation_cost;
             }
             
-            if (legal_system.enactLaw(proposal.law_id, current_tick, has_resources)) {
+            if (legal_system.enactLaw(proposal.law_id, current_tick, has_resources(cost))) {
                 enacted_laws.push_back(proposal.law_id);
             }
         } else {
