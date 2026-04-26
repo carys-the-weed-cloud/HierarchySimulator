@@ -162,6 +162,21 @@ HierarchySimulator/
 - Vulkan SDK
 - Git
 
+### Installing Dependencies (Ubuntu)
+```bash
+sudo apt-get update
+sudo apt-get install -y \
+  ninja-build \
+  libqt6core6 \
+  libqt6widgets6 \
+  libqt6gui6 \
+  libvulkan-dev \
+  vulkan-validationlayers \
+  cmake \
+  g++ \
+  git
+```
+
 ### Building
 ```bash
 git clone https://github.com/carys-the-weed-cloud/HierarchySimulator.git
