@@ -59,6 +59,8 @@ set(WORLD_SOURCES
     src/world/WorldMap.cpp
     src/world/WorldGenerator.cpp
     src/world/Location.cpp
+    src/world/Scenario.cpp
+    src/world/ScenarioManager.cpp
 )
 
 # Source files for UI
@@ -103,6 +105,8 @@ set(HEADERS
     include/hiersim/WorldMap.h
     include/hiersim/WorldGenerator.h
     include/hiersim/Location.h
+    include/hiersim/Scenario.h
+    include/hiersim/ScenarioManager.h
     include/hiersim/MainWindow.h
     include/hiersim/ObjectInspector.h
     include/hiersim/Dashboard.h
