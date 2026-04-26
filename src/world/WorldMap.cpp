@@ -40,17 +40,17 @@ bool WorldMap::removeRegion(RegionID regionId) {
     return true;
 }
 
-WorldMap::Region* WorldMap::getRegion(RegionID regionId) {
+Region* WorldMap::getRegion(RegionID regionId) {
     auto it = regions_.find(regionId);
     return it != regions_.end() ? &it->second : nullptr;
 }
 
-const WorldMap::Region* WorldMap::getRegion(RegionID regionId) const {
+const Region* WorldMap::getRegion(RegionID regionId) const {
     auto it = regions_.find(regionId);
     return it != regions_.end() ? &it->second : nullptr;
 }
 
-WorldMap::Region* WorldMap::getRegionAt(double lat, double lon) {
+Region* WorldMap::getRegionAt(double lat, double lon) {
     Region* closest = nullptr;
     double minDistance = std::numeric_limits<double>::max();
     
