@@ -143,8 +143,9 @@ public:
     
     /**
      * @brief Calculate macroeconomic indicators
+     * @param currentTick Current simulation tick
      */
-    void calculateIndicators();
+    void calculateIndicators(int64_t currentTick);
     
     /**
      * @brief Update class structure based on current conditions

@@ -113,13 +113,13 @@ void EconomicModel::processTick(int64_t currentTick) {
     }
     
     // Recalculate macroeconomic indicators
-    calculateIndicators();
+    calculateIndicators(currentTick);
     
     // Update class structure based on economic conditions
     updateClassStructure();
 }
 
-void EconomicModel::calculateIndicators() {
+void EconomicModel::calculateIndicators(int64_t currentTick) {
     // This is a simplified implementation
     // Full implementation would aggregate data from all Organizations, Facilities, and Markets
     
@@ -149,7 +149,7 @@ void EconomicModel::calculateIndicators() {
     indicators_.investmentRate = 0.2;  // 20% of GDP
     indicators_.consumptionRate = 0.7; // 70% of GDP
     
-    indicators_.lastUpdateTick = m_currentTick;
+    indicators_.lastUpdateTick = currentTick;
 }
 
 void EconomicModel::updateClassStructure() {
