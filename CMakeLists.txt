@@ -52,6 +52,7 @@ set(POLITICS_SOURCES
     src/politics/Ideology.cpp
     src/politics/Policy.cpp
     src/politics/Coalition.cpp
+    src/politics/PoliticsModule.cpp
 )
 
 # Source files for world
@@ -105,6 +106,7 @@ set(HEADERS
     include/hiersim/Ideology.h
     include/hiersim/Policy.h
     include/hiersim/Coalition.h
+    include/hiersim/PoliticsModule.h
     include/hiersim/WorldMap.h
     include/hiersim/Location.h
     include/hiersim/Scenario.h
