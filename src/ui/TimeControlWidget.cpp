@@ -1,4 +1,4 @@
-#include "TimeControlWidget.h"
+#include "hiersim/ui/TimeControlWidget.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>

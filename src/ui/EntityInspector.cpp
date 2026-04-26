@@ -1,9 +1,9 @@
-#include "EntityInspector.h"
-#include "Individual.h"
-#include "Organization.h"
-#include "Facility.h"
-#include "Unit.h"
-#include "WorldMap.h"
+#include "hiersim/ui/EntityInspector.h"
+#include "hiersim/Individual.h"
+#include "hiersim/Organization.h"
+#include "hiersim/Facility.h"
+#include "hiersim/Unit.h"
+#include "hiersim/WorldMap.h"
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QGroupBox>

@@ -1,4 +1,4 @@
-#include "LogPanel.h"
+#include "hiersim/ui/LogPanel.h"
 #include <QDateTime>
 
 namespace hiersim::ui {

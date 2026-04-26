@@ -1,5 +1,5 @@
-#include "MapView.h"
-#include "WorldMap.h"
+#include "hiersim/ui/MapView.h"
+#include "hiersim/WorldMap.h"
 #include <QOpenGLFunctions>
 #include <QPainter>
 

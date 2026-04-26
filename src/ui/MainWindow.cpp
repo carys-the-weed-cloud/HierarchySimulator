@@ -1,9 +1,9 @@
-#include "MainWindow.h"
-#include "MapView.h"
-#include "EntityInspector.h"
-#include "TimeControlWidget.h"
-#include "LogPanel.h"
-#include "Simulation.h"
+#include "hiersim/ui/MainWindow.h"
+#include "hiersim/ui/MapView.h"
+#include "hiersim/ui/EntityInspector.h"
+#include "hiersim/ui/TimeControlWidget.h"
+#include "hiersim/ui/LogPanel.h"
+#include "hiersim/Simulation.h"
 #include <QMenuBar>
 #include <QMenu>
 #include <QAction>

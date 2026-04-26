@@ -1,4 +1,4 @@
-#include "TimeController.h"
+#include "hiersim/TimeController.h"
 
 namespace hiersim {
 

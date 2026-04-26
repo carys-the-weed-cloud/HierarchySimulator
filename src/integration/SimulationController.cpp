@@ -1,5 +1,5 @@
-#include "SimulationController.h"
-#include "Scenario.h"
+#include "hiersim/SimulationController.h"
+#include "hiersim/Scenario.h"
 
 #include <QFileDialog>
 #include <QMessageBox>
