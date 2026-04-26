@@ -5,6 +5,7 @@
 #include <vector>
 #include <map>
 #include <cstdint>
+#include <algorithm>
 
 namespace hiersim {
 

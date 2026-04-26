@@ -197,8 +197,8 @@ void Simulation::updateOrganizations() {
     
     // TODO: Implement organization decision-making
     // For now, iterate through organizations and update their state
-    auto& orgs = m_scenario->organizations;
-    for (auto& [id, org] : orgs) {
+    const auto& orgs = m_scenario->getOrganizations();
+    for (const auto& [id, org] : orgs) {
         // Placeholder for organization updates
         // - Process resource allocation
         // - Handle membership changes
@@ -213,8 +213,8 @@ void Simulation::updateIndividuals() {
     
     // TODO: Implement individual decision-making
     // For now, iterate through individuals and update their state
-    auto& individuals = m_scenario->individuals;
-    for (auto& [id, individual] : individuals) {
+    const auto& individuals = m_scenario->getIndividuals();
+    for (const auto& [id, individual] : individuals) {
         // Placeholder for individual updates
         // - Process needs and desires
         // - Update relationships
@@ -229,8 +229,8 @@ void Simulation::updateUnits() {
     
     // TODO: Implement unit operations
     // For now, iterate through units and update their state
-    auto& units = m_scenario->units;
-    for (auto& [id, unit] : units) {
+    const auto& units = m_scenario->getUnits();
+    for (const auto& [id, unit] : units) {
         // Placeholder for unit updates
         // - Process movement orders
         // - Handle combat resolution
@@ -250,10 +250,10 @@ void Simulation::calculateStats() {
     }
     
     // Count objects
-    m_stats.total_organizations = static_cast<int>(m_scenario->organizations.size());
-    m_stats.total_facilities = static_cast<int>(m_scenario->facilities.size());
-    m_stats.total_units = static_cast<int>(m_scenario->units.size());
-    m_stats.total_individuals = static_cast<int>(m_scenario->individuals.size());
+    m_stats.total_organizations = static_cast<int>(m_scenario->getOrganizations().size());
+    m_stats.total_facilities = static_cast<int>(m_scenario->getFacilities().size());
+    m_stats.total_units = static_cast<int>(m_scenario->getUnits().size());
+    m_stats.total_individuals = static_cast<int>(m_scenario->getIndividuals().size());
     
     // Get economic indicators from economic model
     if (m_economicModel) {

@@ -44,7 +44,7 @@ public:
     double getWealth() const { return wealth_; }
     const std::string& getIdeology() const { return ideology_; }
     const std::map<std::string, double>& getSkills() const { return skills_; }
-    const std::vector<ID>& getRelationships() const { return relationships_; }
+    const std::map<ID, double>& getRelationships() const { return relationships_; }
     Organization* getOrganization() const { return organization_; }
     Facility* getFacility() const { return facility_; }
     bool isAlive() const { return alive_; }

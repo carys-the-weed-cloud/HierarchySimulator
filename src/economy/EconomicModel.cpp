@@ -1,4 +1,5 @@
 #include "hiersim/EconomicModel.h"
+#include "hiersim/Scenario.h"
 #include <sstream>
 #include <iomanip>
 #include <algorithm>
@@ -9,7 +10,7 @@ namespace hiersim {
 EconomicModel::ID EconomicModel::nextId_ = 1;
 
 EconomicModel::EconomicModel(const std::string& name, SystemType systemType)
-    : id_(name != 0 ? nextId_++ : 1)
+    : id_(nextId_++)
     , name_(name)
     , systemType_(systemType)
     , totalSurplusValue_(0.0)
@@ -74,6 +75,35 @@ Market* EconomicModel::getOrCreateMarket(Commodity::Type commodityType) {
     typeToMarketMap_[commodityType] = market->getId();
     markets_.push_back(market);
     return market.get();
+}
+
+void EconomicModel::setScenario(std::shared_ptr<Scenario> scenario) {
+    scenario_ = scenario;
+    // Initialize markets based on scenario data if available
+    if (scenario_) {
+        // TODO: Initialize economic data from scenario
+    }
+}
+
+EconomicModel::CrisisFlags EconomicModel::detectCrises() const {
+    CrisisFlags flags;
+    
+    // Detect overproduction crisis (high capacity utilization but low consumption)
+    if (indicators_.capacityUtilization > 0.9 && indicators_.consumptionRate < 0.5) {
+        flags.overproduction = true;
+    }
+    
+    // Detect profit squeeze (falling profit rate with rising wage share)
+    if (indicators_.profitRate < 0.05 && indicators_.wageShare > 0.7) {
+        flags.profitSqueeze = true;
+    }
+    
+    // Detect financial instability (high credit volume relative to money supply)
+    if (indicators_.moneySupply > 0 && indicators_.creditVolume / indicators_.moneySupply > 5.0) {
+        flags.financialInstability = true;
+    }
+    
+    return flags;
 }
 
 void EconomicModel::processTick(int64_t currentTick) {

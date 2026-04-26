@@ -10,6 +10,8 @@
 #include <atomic>
 #include <mutex>
 #include <queue>
+#include <thread>
+#include <nlohmann/json.hpp>
 
 namespace hiersim {
 

@@ -6,6 +6,7 @@
 #include <map>
 #include <memory>
 #include <cstdint>
+#include <algorithm>
 
 namespace hiersim {
 

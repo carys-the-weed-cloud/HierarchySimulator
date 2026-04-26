@@ -111,6 +111,29 @@ public:
     Market* getOrCreateMarket(Commodity::Type commodityType);
     
     /**
+     * @brief Set the scenario for this economic model
+     * @param scenario Shared pointer to scenario
+     */
+    void setScenario(std::shared_ptr<Scenario> scenario);
+    
+    /**
+     * @brief Get macroeconomic indicators
+     * @return Current macroeconomic indicators
+     */
+    MacroIndicators getMacroeconomicIndicators() const { return indicators_; }
+    
+    /**
+     * @brief Detect economic crises
+     * @return CrisisFlags indicating which crises are active
+     */
+    struct CrisisFlags {
+        bool overproduction = false;
+        bool profitSqueeze = false;
+        bool financialInstability = false;
+    };
+    CrisisFlags detectCrises() const;
+    
+    /**
      * @brief Process one tick of the economic simulation
      * @param currentTick Current simulation tick
      */
@@ -178,6 +201,9 @@ private:
     double totalVariableCapital_;  // Wages
     double totalConstantCapital_;  // Means of production
     double totalOutput_;
+    
+    // Scenario reference
+    std::shared_ptr<Scenario> scenario_;
     
     static ID nextId_;
 };
