@@ -3,11 +3,13 @@
 
 #include "hiersim/Commodity.h"
 #include "hiersim/Market.h"
+#include "hiersim/Scenario.h"
 #include <string>
 #include <map>
 #include <vector>
 #include <memory>
 #include <cstdint>
+#include <cmath>
 
 namespace hiersim {
 

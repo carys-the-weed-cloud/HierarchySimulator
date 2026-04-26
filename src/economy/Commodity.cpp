@@ -1,6 +1,7 @@
 #include "hiersim/Commodity.h"
 #include <sstream>
 #include <iomanip>
+#include <cmath>
 
 namespace hiersim {
 

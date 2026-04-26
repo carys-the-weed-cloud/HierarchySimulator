@@ -6,7 +6,7 @@ namespace hiersim {
 
 Simulation::Simulation(std::shared_ptr<Scenario> scenario)
     : m_scenario(scenario)
-    , m_economicModel(std::make_unique<EconomicModel>())
+    , m_economicModel(std::make_unique<EconomicModel>("Default Economy", EconomicModel::SystemType::MixedEconomy))
 {
     // Initialize economic model with scenario data
     if (m_scenario) {
@@ -186,7 +186,7 @@ void Simulation::processEvents() {
 
 void Simulation::updateEconomy() {
     if (m_economicModel && m_scenario) {
-        m_economicModel->processTick();
+        m_economicModel->processTick(m_currentTick);
     }
 }
 
