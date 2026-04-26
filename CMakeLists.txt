@@ -25,8 +25,8 @@ include_directories(${CMAKE_SOURCE_DIR}/src)
 
 # Source files for core library
 set(CORE_SOURCES
-    src/core/SimulationEngine.cpp
-    src/core/TimeSystem.cpp
+    src/core/Simulation.cpp
+    src/core/TimeController.cpp
     src/core/EventManager.cpp
     src/core/Logger.cpp
     src/core/Config.cpp
@@ -57,7 +57,6 @@ set(POLITICS_SOURCES
 # Source files for world
 set(WORLD_SOURCES
     src/world/WorldMap.cpp
-    src/world/WorldGenerator.cpp
     src/world/Location.cpp
     src/world/Scenario.cpp
     src/world/ScenarioManager.cpp
@@ -87,8 +86,8 @@ set(UTILS_SOURCES
 
 # Header files
 set(HEADERS
-    include/hiersim/SimulationEngine.h
-    include/hiersim/TimeSystem.h
+    include/hiersim/Simulation.h
+    include/hiersim/TimeController.h
     include/hiersim/EventManager.h
     include/hiersim/Logger.h
     include/hiersim/Config.h
@@ -103,7 +102,6 @@ set(HEADERS
     include/hiersim/Policy.h
     include/hiersim/Coalition.h
     include/hiersim/WorldMap.h
-    include/hiersim/WorldGenerator.h
     include/hiersim/Location.h
     include/hiersim/Scenario.h
     include/hiersim/ScenarioManager.h
