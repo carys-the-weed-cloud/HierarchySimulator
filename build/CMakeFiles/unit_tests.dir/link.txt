@@ -1,0 +1,1 @@
+/usr/bin/c++ -g -O0 -Wall -Wextra -Wpedantic CMakeFiles/unit_tests.dir/tests/unit/test_Individual.cpp.o CMakeFiles/unit_tests.dir/tests/unit/test_Organization.cpp.o CMakeFiles/unit_tests.dir/tests/unit/test_Facility.cpp.o CMakeFiles/unit_tests.dir/tests/unit/test_Unit.cpp.o -o unit_tests  /usr/lib/x86_64-linux-gnu/libQt6Core.so.6.4.2 

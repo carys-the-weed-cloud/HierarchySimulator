@@ -18,6 +18,6 @@ Dashboard::Dashboard(QWidget* parent) : QWidget(parent) {
 void Dashboard::setSimulation(Simulation* sim) { simulation_ = sim; }
 void Dashboard::update() {
     if (!simulation_) return;
-    tickLabel_->setText(QString("Tick: %1").arg(simulation_->getTickCount()));
+    tickLabel_->setText(QString("Tick: %1").arg(simulation_->getCurrentTick()));
 }
 }

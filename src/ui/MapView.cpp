@@ -2,6 +2,7 @@
 #include "hiersim/Simulation.h"
 #include "hiersim/WorldMap.h"
 #include <QOpenGLFunctions>
+#include <QOpenGLWidget>
 #include <QPainter>
 
 namespace hiersim::ui {
@@ -9,6 +10,7 @@ namespace hiersim::ui {
 MapView::MapView(QWidget *parent)
     : QOpenGLWidget(parent)
     , m_worldMap(nullptr)
+    , m_worldMapPtr(nullptr)
     , m_simulation(nullptr)
     , m_zoom(1.0f)
     , m_panX(0.0f)
@@ -24,13 +26,15 @@ MapView::~MapView() = default;
 void MapView::initialize(Simulation* simulation) {
     m_simulation = simulation;
     if (simulation && simulation->getScenario()) {
-        m_worldMap = simulation->getScenario()->getWorldMap();
+        // getWorldMap() returns a raw pointer, we don't take ownership
+        m_worldMapPtr = simulation->getScenario()->getWorldMap();
         update();
     }
 }
 
 void MapView::setWorldMap(std::shared_ptr<WorldMap> map) {
     m_worldMap = map;
+    m_worldMapPtr = map.get();
     update();
 }
 
@@ -46,7 +50,7 @@ void MapView::resizeGL(int w, int h) {
 void MapView::paintGL() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-    if (!m_worldMap) return;
+    if (!m_worldMapPtr) return;
     
     // TODO: Implement Vulkan-based rendering
     // For now, use OpenGL placeholder
@@ -57,7 +61,9 @@ void MapView::paintGL() {
 void MapView::renderRegions() {
     // Placeholder: In production, this would use Vulkan to render regions
     // with terrain colors and ownership overlays
-    const auto& regions = m_worldMap->getRegions();
+    if (!m_worldMapPtr) return;
+    
+    const auto& regions = m_worldMapPtr->getRegions();
     
     glBegin(GL_TRIANGLES);
     for (const auto& [id, region] : regions) {
@@ -106,9 +112,10 @@ void MapView::mousePressEvent(QMouseEvent *event) {
     } else if (event->button() == Qt::RightButton) {
         // Select region on right click
         // TODO: Implement proper hit detection
-        if (m_worldMap && !m_worldMap->getRegions().empty()) {
-            auto firstRegion = m_worldMap->getRegions().begin();
-            emit regionSelected(firstRegion->first);
+        if (m_worldMapPtr && !m_worldMapPtr->getRegions().empty()) {
+            auto firstRegion = m_worldMapPtr->getRegions().begin();
+            // Convert region ID (uint64_t) to string
+            emit regionSelected(std::to_string(firstRegion->first));
         }
     }
 }

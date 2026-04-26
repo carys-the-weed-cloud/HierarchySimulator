@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QOpenGLWidget>
+#include <QOpenGLFunctions>
 #include <QMouseEvent>
 #include <string>
 #include <memory>
@@ -17,7 +18,7 @@ namespace hiersim::ui {
      * Renders world regions with terrain colors, ownership overlays,
      * and interactive selection capabilities.
      */
-    class MapView : public QOpenGLWidget {
+    class MapView : public QOpenGLWidget, protected QOpenGLFunctions {
         Q_OBJECT
 
     public:
@@ -44,7 +45,8 @@ namespace hiersim::ui {
         void renderRegions();
         void renderConnections();
         
-        std::shared_ptr<WorldMap> m_worldMap;
+        std::shared_ptr<WorldMap> m_worldMap;  // When we own the map
+        const WorldMap* m_worldMapPtr = nullptr;  // Raw pointer when borrowed from Scenario
         Simulation* m_simulation = nullptr;
         
         // Camera state

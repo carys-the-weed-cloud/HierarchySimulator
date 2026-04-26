@@ -1,5 +1,6 @@
 #include "hiersim/SimulationController.h"
-#include "hiersim/Scenario.h"
+#include "hiersim/ScenarioManager.h"
+#include "hiersim/ui/MainWindow.h"
 
 #include <QFileDialog>
 #include <QMessageBox>
@@ -10,43 +11,45 @@ namespace hiersim {
 SimulationController::SimulationController(QObject* parent)
     : QObject(parent)
     , scenarioManager_(std::make_unique<ScenarioManager>())
-    , mainWindow_(std::make_unique<MainWindow>())
     , timeController_(std::make_unique<TimeController>())
 {
+    // Create main window after other members are initialized
+    mainWindow_ = std::make_unique<ui::MainWindow>();
+    
     // Connect TimeController signals to simulation slots
-    connect(timeController_.get(), &TimeController::tickRequested,
+    connect(timeController_.get(), &TimeController::tickOccurred,
             this, &SimulationController::onTick);
     connect(timeController_.get(), &TimeController::speedChanged,
             this, &SimulationController::onSpeedChanged);
-    connect(timeController_.get(), &TimeController::pausedChanged,
-            this, &SimulationController::onPausedChanged);
+    connect(timeController_.get(), &TimeController::stateChanged,
+            this, &SimulationController::onStateChanged);
 
     // Connect MainWindow actions to controller slots
-    connect(mainWindow_.get(), &MainWindow::loadScenarioRequested,
+    connect(mainWindow_.get(), &ui::MainWindow::loadScenarioRequested,
             this, &SimulationController::loadScenario);
-    connect(mainWindow_.get(), &MainWindow::saveScenarioRequested,
+    connect(mainWindow_.get(), &ui::MainWindow::saveScenarioRequested,
             this, &SimulationController::saveScenario);
 
     // Connect simulation events to UI updates
     connect(this, &SimulationController::tickCompleted,
-            mainWindow_.get(), &MainWindow::updateTickCount);
+            mainWindow_.get(), &ui::MainWindow::updateTickCount);
     connect(this, &SimulationController::stateChanged,
-            mainWindow_.get(), &MainWindow::updateSimulationState);
+            mainWindow_.get(), &ui::MainWindow::updateSimulationState);
     connect(this, &SimulationController::eventOccurred,
-            mainWindow_.get(), &MainWindow::addLogEntry);
+            mainWindow_.get(), &ui::MainWindow::addLogEntry);
 }
 
 SimulationController::~SimulationController() = default;
 
 bool SimulationController::initialize(const std::string& scenarioId)
 {
-    auto scenario = scenarioManager_->loadById(scenarioId);
+    auto scenario = scenarioManager_->loadScenario(scenarioId);
     if (!scenario) {
         qCritical() << "Failed to load scenario:" << QString::fromStdString(scenarioId);
         return false;
     }
 
-    simulation_ = std::make_unique<Simulation>(std::move(*scenario));
+    simulation_ = std::make_unique<Simulation>(scenario);
     
     // Initialize main window with simulation data
     mainWindow_->initialize(simulation_.get());
@@ -58,7 +61,7 @@ bool SimulationController::initialize(const std::string& scenarioId)
     return true;
 }
 
-void SimulationController::onTick()
+void SimulationController::onTick(int tickNumber)
 {
     if (!initialized_ || !simulation_) {
         return;
@@ -66,7 +69,7 @@ void SimulationController::onTick()
 
     simulation_->step();
     
-    int currentTick = simulation_->getTickCount();
+    int currentTick = simulation_->getCurrentTick();
     emit tickCompleted(currentTick);
     
     // Update entity inspector if an entity is selected
@@ -88,10 +91,10 @@ void SimulationController::onSpeedChanged(double ticksPerSecond)
     }
 }
 
-void SimulationController::onPausedChanged(bool paused)
+void SimulationController::onStateChanged(bool running, bool paused)
 {
-    emit stateChanged(!paused);
-    qDebug() << "Simulation" << (paused ? "paused" : "resumed");
+    emit stateChanged(running && !paused);
+    qDebug() << "Simulation state changed - running:" << running << "paused:" << paused;
 }
 
 void SimulationController::loadScenario(const QString& filePath)
@@ -100,14 +103,14 @@ void SimulationController::loadScenario(const QString& filePath)
         return;
     }
 
-    auto scenario = scenarioManager_->load(filePath.toStdString());
+    auto scenario = Scenario::loadFromFile(filePath.toStdString());
     if (!scenario) {
         QMessageBox::critical(mainWindow_.get(), tr("Load Error"),
                               tr("Failed to load scenario from %1").arg(filePath));
         return;
     }
 
-    simulation_ = std::make_unique<Simulation>(std::move(*scenario));
+    simulation_ = std::make_unique<Simulation>(scenario);
     mainWindow_->initialize(simulation_.get());
     initialized_ = true;
     
@@ -122,7 +125,7 @@ void SimulationController::saveScenario(const QString& filePath)
     }
 
     const auto& scenario = simulation_->getScenario();
-    if (scenarioManager_->save(scenario, filePath.toStdString())) {
+    if (scenario && scenarioManager_->saveScenario(*scenario)) {
         emit eventOccurred(tr("Saved scenario to %1").arg(filePath));
     } else {
         QMessageBox::critical(mainWindow_.get(), tr("Save Error"),
