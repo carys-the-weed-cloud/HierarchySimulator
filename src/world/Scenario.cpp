@@ -260,7 +260,7 @@ Scenario Scenario::deserialize(const std::string& data) {
         // This is a simplified version for the skeleton implementation
     }
     
-    return scenario;
+    return std::move(scenario);
 }
 
 bool Scenario::saveToFile(const std::string& filepath) const {

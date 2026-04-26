@@ -30,7 +30,7 @@ public:
      * @param name The name of the individual
      * @param id Unique identifier (auto-generated if not provided)
      */
-    explicit Individual(const std::string& name, ID id = 0);
+    explicit Individual(const std::string& name = "", ID id = 0);
     
     /**
      * @brief Destroy the Individual object

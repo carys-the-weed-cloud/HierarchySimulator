@@ -54,7 +54,7 @@ public:
      * @param type Type of facility
      * @param id Unique identifier (auto-generated if not provided)
      */
-    explicit Facility(const std::string& name, 
+    explicit Facility(const std::string& name = "", 
                      FacilityType type = FacilityType::Factory,
                      ID id = 0);
     

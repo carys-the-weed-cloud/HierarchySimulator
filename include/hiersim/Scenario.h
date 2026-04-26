@@ -69,6 +69,14 @@ public:
     
     ~Scenario() = default;
     
+    // Copy constructor and assignment operator (needed for map operations)
+    Scenario(const Scenario&) = delete;
+    Scenario& operator=(const Scenario&) = delete;
+    
+    // Move constructor and assignment operator
+    Scenario(Scenario&&) = default;
+    Scenario& operator=(Scenario&&) = default;
+    
     // Getters
     ID getId() const { return id_; }
     const ScenarioMetadata& getMetadata() const { return metadata_; }

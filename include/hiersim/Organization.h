@@ -49,7 +49,7 @@ public:
      * @param type Type of organization
      * @param id Unique identifier (auto-generated if not provided)
      */
-    explicit Organization(const std::string& name, 
+    explicit Organization(const std::string& name = "", 
                          StructureType type = StructureType::Hierarchy,
                          ID id = 0);
     

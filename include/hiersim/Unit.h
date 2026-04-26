@@ -50,7 +50,7 @@ public:
      * @param type Type of unit
      * @param id Unique identifier (auto-generated if not provided)
      */
-    explicit Unit(const std::string& name,
+    explicit Unit(const std::string& name = "",
                  UnitType type = UnitType::StandingArmy,
                  ID id = 0);
     
