@@ -78,6 +78,11 @@ set(WORLD_SOURCES
     src/world/ScenarioManager.cpp
 )
 
+# Source files for space expansion
+set(SPACE_SOURCES
+    src/space/SolarSystem.cpp
+)
+
 # Source files for UI
 set(UI_SOURCES
     src/ui/MainWindow.cpp
@@ -129,6 +134,7 @@ set(HEADERS
     include/hiersim/Location.h
     include/hiersim/Scenario.h
     include/hiersim/ScenarioManager.h
+    include/hiersim/SolarSystem.h
     include/hiersim/ui/MainWindow.h
     include/hiersim/ui/MapView.h
     include/hiersim/ui/EntityInspector.h
@@ -156,6 +162,7 @@ add_executable(hiersim
     ${TECHNOLOGY_SOURCES}
     ${LAW_SOURCES}
     ${WORLD_SOURCES}
+    ${SPACE_SOURCES}
     ${UI_SOURCES}
     ${GRAPHICS_SOURCES}
     ${UTILS_SOURCES}
