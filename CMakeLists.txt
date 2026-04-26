@@ -65,6 +65,10 @@ set(WORLD_SOURCES
 # Source files for UI
 set(UI_SOURCES
     src/ui/MainWindow.cpp
+    src/ui/MapView.cpp
+    src/ui/EntityInspector.cpp
+    src/ui/TimeControlWidget.cpp
+    src/ui/LogPanel.cpp
     src/ui/ObjectInspector.cpp
     src/ui/Dashboard.cpp
     src/ui/HierarchyView.cpp
@@ -105,7 +109,11 @@ set(HEADERS
     include/hiersim/Location.h
     include/hiersim/Scenario.h
     include/hiersim/ScenarioManager.h
-    include/hiersim/MainWindow.h
+    include/hiersim/ui/MainWindow.h
+    include/hiersim/ui/MapView.h
+    include/hiersim/ui/EntityInspector.h
+    include/hiersim/ui/TimeControlWidget.h
+    include/hiersim/ui/LogPanel.h
     include/hiersim/ObjectInspector.h
     include/hiersim/Dashboard.h
     include/hiersim/HierarchyView.h
