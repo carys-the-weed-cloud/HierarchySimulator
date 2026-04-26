@@ -102,7 +102,7 @@ bool ScenarioManager::saveScenario(const Scenario& scenario) {
     return false;
 }
 
-bool ScenarioManager::deleteScenario(uint64_t scenarioId) {
+bool ScenarioManager::deleteScenario(const std::string& scenarioId) {
     auto it = scenarioFiles_.find(scenarioId);
     if (it == scenarioFiles_.end()) {
         return false;

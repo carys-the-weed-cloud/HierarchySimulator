@@ -63,7 +63,7 @@ public:
      * @param scenarioId ID of scenario to delete
      * @return true if deleted successfully
      */
-    bool deleteScenario(uint64_t scenarioId);
+    bool deleteScenario(const std::string& scenarioId);
     
     /**
      * @brief Get the default/base scenario
