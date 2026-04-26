@@ -1,4 +1,6 @@
 #include "hiersim/Coalition.h"
+#include <algorithm>
+
 namespace hiersim {
 void Coalition::addMember(const std::string& orgId) {
     memberOrgIds.push_back(orgId);

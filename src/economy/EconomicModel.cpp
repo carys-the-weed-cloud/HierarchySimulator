@@ -149,7 +149,7 @@ void EconomicModel::calculateIndicators() {
     indicators_.investmentRate = 0.2;  // 20% of GDP
     indicators_.consumptionRate = 0.7; // 70% of GDP
     
-    indicators_.lastUpdateTick = currentTick;
+    indicators_.lastUpdateTick = m_currentTick;
 }
 
 void EconomicModel::updateClassStructure() {
