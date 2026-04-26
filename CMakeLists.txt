@@ -55,6 +55,21 @@ set(POLITICS_SOURCES
     src/politics/PoliticsModule.cpp
 )
 
+# Source files for culture
+set(CULTURE_SOURCES
+    src/culture/Culture.cpp
+)
+
+# Source files for technology
+set(TECHNOLOGY_SOURCES
+    src/technology/Technology.cpp
+)
+
+# Source files for law
+set(LAW_SOURCES
+    src/law/Law.cpp
+)
+
 # Source files for world
 set(WORLD_SOURCES
     src/world/WorldMap.cpp
@@ -107,6 +122,9 @@ set(HEADERS
     include/hiersim/Policy.h
     include/hiersim/Coalition.h
     include/hiersim/PoliticsModule.h
+    include/hiersim/Culture.h
+    include/hiersim/Technology.h
+    include/hiersim/Law.h
     include/hiersim/WorldMap.h
     include/hiersim/Location.h
     include/hiersim/Scenario.h
@@ -134,6 +152,9 @@ add_executable(hiersim
     ${OBJECTS_SOURCES}
     ${ECONOMY_SOURCES}
     ${POLITICS_SOURCES}
+    ${CULTURE_SOURCES}
+    ${TECHNOLOGY_SOURCES}
+    ${LAW_SOURCES}
     ${WORLD_SOURCES}
     ${UI_SOURCES}
     ${GRAPHICS_SOURCES}
