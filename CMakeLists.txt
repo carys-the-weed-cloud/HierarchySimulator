@@ -19,6 +19,14 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets)
 find_package(Vulkan REQUIRED)
 
+# Fetch nlohmann/json
+include(FetchContent)
+FetchContent_Declare(
+  json
+  URL https://github.com/nlohmann/json/releases/download/v3.11.3/json.tar.xz
+)
+FetchContent_MakeAvailable(json)
+
 # Include directories
 include_directories(${CMAKE_SOURCE_DIR}/include)
 include_directories(${CMAKE_SOURCE_DIR}/src)
@@ -175,6 +183,7 @@ target_link_libraries(hiersim PRIVATE
     Qt6::Gui
     Qt6::Widgets
     Vulkan::Vulkan
+    nlohmann_json::nlohmann_json
 )
 
 # Enable testing
@@ -190,6 +199,7 @@ add_executable(unit_tests
 
 target_link_libraries(unit_tests PRIVATE
     Qt6::Core
+    nlohmann_json::nlohmann_json
 )
 
 add_test(NAME UnitTests COMMAND unit_tests)
