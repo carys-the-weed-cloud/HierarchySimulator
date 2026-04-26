@@ -3,6 +3,7 @@
 
 #include "Scenario.h"
 #include "EconomicModel.h"
+#include <QObject>
 #include <memory>
 #include <vector>
 #include <functional>
@@ -80,7 +81,8 @@ using EventCallback = std::function<void(const ScheduledEvent&)>;
  * - Configurable speed: 1-6 ticks per second (real-time)
  * - Full pause/step/play control
  */
-class Simulation {
+class Simulation : public QObject {
+    Q_OBJECT
 public:
     /**
      * @brief Simulation speed presets
@@ -151,6 +153,12 @@ public:
     bool isRunning() const;
     
     /**
+     * @brief Set whether the simulation is running
+     * @param running true to start/resume, false to pause
+     */
+    void setRunning(bool running);
+    
+    /**
      * @brief Check if simulation is paused
      * @return true if paused
      */
@@ -161,6 +169,23 @@ public:
      * @return Current simulation tick
      */
     int getCurrentTick() const;
+    
+    /**
+     * @brief Advance simulation by one tick (public for MainWindow)
+     */
+    void tick();
+    
+    /**
+     * @brief Load a scenario from file
+     * @param filepath Path to scenario file
+     */
+    void loadScenario(const std::string& filepath);
+    
+    /**
+     * @brief Save current scenario to file
+     * @param filepath Path to save scenario
+     */
+    void saveScenario(const std::string& filepath);
     
     /**
      * @brief Get simulation statistics
@@ -243,6 +268,22 @@ private:
      * @brief Notify registered callbacks
      */
     void notifyCallbacks();
+
+signals:
+    /**
+     * @brief Emitted when the tick counter changes
+     */
+    void tickChanged(int tick);
+    
+    /**
+     * @brief Emitted when simulation speed changes
+     */
+    void speedChanged(int speed);
+    
+    /**
+     * @brief Emitted when simulation running state changes
+     */
+    void stateChanged(bool running);
 
 private:
     std::shared_ptr<Scenario> m_scenario;

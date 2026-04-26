@@ -28,6 +28,7 @@ void Simulation::start() {
     
     m_running = true;
     m_paused = false;
+    emit stateChanged(true);
     m_simulationThread = std::thread(&Simulation::simulationLoop, this);
 }
 
@@ -38,6 +39,7 @@ void Simulation::stop() {
     
     m_running = false;
     m_paused = false;
+    emit stateChanged(false);
     
     if (m_simulationThread.joinable()) {
         m_simulationThread.join();
@@ -46,11 +48,13 @@ void Simulation::stop() {
 
 void Simulation::pause() {
     m_paused = true;
+    emit stateChanged(false);
 }
 
 void Simulation::resume() {
     if (m_running) {
         m_paused = false;
+        emit stateChanged(true);
     }
 }
 
@@ -73,6 +77,7 @@ void Simulation::setSpeed(double ticksPerSecond) {
     }
     
     m_ticksPerSecond = ticksPerSecond;
+    emit speedChanged(static_cast<int>(ticksPerSecond));
 }
 
 double Simulation::getSpeed() const {
@@ -83,12 +88,44 @@ bool Simulation::isRunning() const {
     return m_running.load();
 }
 
+void Simulation::setRunning(bool running) {
+    if (running) {
+        if (!m_running) {
+            start();
+        } else if (m_paused) {
+            resume();
+        }
+    } else {
+        pause();
+    }
+}
+
 bool Simulation::isPaused() const {
     return m_paused.load();
 }
 
 int Simulation::getCurrentTick() const {
     return m_currentTick.load();
+}
+
+void Simulation::tick() {
+    if (!m_paused) {
+        processTick();
+    }
+}
+
+void Simulation::loadScenario(const std::string& filepath) {
+    auto scenario = Scenario::loadFromFile(filepath);
+    if (scenario.getMetadata().id != "") {
+        m_scenario = std::make_shared<Scenario>(std::move(scenario));
+        m_economicModel->setScenario(m_scenario);
+    }
+}
+
+void Simulation::saveScenario(const std::string& filepath) {
+    if (m_scenario) {
+        m_scenario->saveToFile(filepath);
+    }
 }
 
 SimulationStats Simulation::getStats() const {
@@ -157,6 +194,11 @@ void Simulation::processTick() {
     
     // Detect crises
     detectCrises();
+    
+    // Emit Qt signals for UI updates
+    emit tickChanged(m_currentTick.load());
+    emit speedChanged(static_cast<int>(m_ticksPerSecond.load()));
+    emit stateChanged(m_running.load() && !m_paused.load());
     
     // Notify callbacks
     notifyCallbacks();

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.28)
+cmake_minimum_required(VERSION 3.25)
 project(HierarchySimulator VERSION 0.1.0 LANGUAGES CXX)
 
 # Set C++23 standard
@@ -103,6 +103,14 @@ set(UI_SOURCES
     src/ui/HierarchyView.cpp
 )
 
+# Qt MOC headers (headers with Q_OBJECT)
+set(QT_MOC_HEADERS
+    include/hiersim/Simulation.h
+    include/hiersim/ui/TimeControlWidget.h
+    include/hiersim/ui/MainWindow.h
+    include/hiersim/ui/MapView.h
+)
+
 # Source files for graphics
 set(GRAPHICS_SOURCES
     src/graphics/VulkanRenderer.cpp
@@ -175,6 +183,13 @@ add_executable(hiersim
     ${GRAPHICS_SOURCES}
     ${UTILS_SOURCES}
     ${HEADERS}
+)
+
+# Enable Qt MOC for headers with Q_OBJECT
+set_target_properties(hiersim PROPERTIES
+    AUTOMOC ON
+    AUTOUIC ON
+    AUTORCC ON
 )
 
 # Link libraries
