@@ -554,20 +554,20 @@ bool SolarSystem::attemptColonization(const std::string& bodyId, const std::stri
     if (!body) return false;
     
     // Check if habitable or has life support
-    if (body.habitabilityIndex < 0.1 && body.lifeSupportCapacity <= 0) {
+    if (body->habitabilityIndex < 0.1 && body->lifeSupportCapacity <= 0) {
         return false;  // Cannot colonize without life support
     }
     
     // Add colonists
-    body.population += colonists;
-    body.controllingFaction = orgId;
+    body->population += colonists;
+    body->controllingFaction = orgId;
     
     // Create initial base
     SpaceInfrastructure base;
-    base.id = "base_" + bodyId + "_" + std::to_string(Random::nextInt(10000));
+    base.id = "base_" + bodyId + "_" + std::to_string(Random::getInstance().nextInt(0, 10000));
     base.name = body->name + " Outpost";
     base.ownerId = orgId;
-    base.type = SpaceInfrastructure::MiningOutpost;
+    base.type = SpaceInfrastructure::Type::MiningOutpost;
     base.population = colonists / 2;  // Half work at the base
     base.isOperational = true;
     body->infrastructure.push_back(base);
@@ -604,18 +604,18 @@ bool SolarSystem::initiateSpaceCombat(const std::string& bodyId,
     for (const auto& attId : attackerIds) {
         auto* vessel = getVessel(attId);
         if (vessel) {
-            attackStrength += vessel->hullIntegrity * (vessel->type == SpaceVessel::Warship ? 2.0 : 0.5);
+            attackStrength += vessel->hullIntegrity * (vessel->type == SpaceVessel::Type::Warship ? 2.0 : 0.5);
         }
     }
     
     for (const auto& defId : defenderIds) {
         auto* vessel = getVessel(defId);
         if (vessel) {
-            defenseStrength += vessel->hullIntegrity * (vessel->type == SpaceVessel::Warship ? 2.0 : 0.5);
+            defenseStrength += vessel->hullIntegrity * (vessel->type == SpaceVessel::Type::Warship ? 2.0 : 0.5);
         }
         // Add base defenses
         for (const auto& infra : body->infrastructure) {
-            if (infra.type == SpaceInfrastructure::MilitaryBase) {
+            if (infra.type == SpaceInfrastructure::Type::MilitaryBase) {
                 defenseStrength += infra.integrity * 3.0;
             }
         }
@@ -640,8 +640,23 @@ std::string SolarSystem::serialize() const {
     // Simplified serialization - would need proper JSON/binary in production
     std::string data = "SOLARSYSTEM_V1\n";
     data += "BODIES:" + std::to_string(bodies_.size()) + "\n";
+    
+    // Helper lambda to convert CelestialBodyType to string
+    auto typeToString = [](CelestialBodyType type) -> std::string {
+        switch (type) {
+            case CelestialBodyType::Star: return "Star";
+            case CelestialBodyType::Planet: return "Planet";
+            case CelestialBodyType::Moon: return "Moon";
+            case CelestialBodyType::Asteroid: return "Asteroid";
+            case CelestialBodyType::DwarfPlanet: return "DwarfPlanet";
+            case CelestialBodyType::Comet: return "Comet";
+            case CelestialBodyType::SpaceHabitat: return "SpaceHabitat";
+            default: return "Unknown";
+        }
+    };
+    
     for (const auto& body : bodies_) {
-        data += body.id + "," + body.name + "," + std::to_string(body.type) + ",";
+        data += body.id + "," + body.name + "," + typeToString(body.type) + ",";
         data += std::to_string(body.population) + "," + body.controllingFaction + "\n";
     }
     data += "ROUTES:" + std::to_string(routes_.size()) + "\n";
@@ -682,10 +697,10 @@ double SolarSystem::calculateCombatOutcome(const std::vector<SpaceVessel*>& atta
     double attackStr = 0, defenseStr = 0;
     
     for (auto* v : attackers) {
-        attackStr += v->hullIntegrity * (v->type == SpaceVessel::Warship ? 2.0 : 0.5);
+        attackStr += v->hullIntegrity * (v->type == SpaceVessel::Type::Warship ? 2.0 : 0.5);
     }
     for (auto* v : defenders) {
-        defenseStr += v->hullIntegrity * (v->type == SpaceVessel::Warship ? 2.0 : 0.5);
+        defenseStr += v->hullIntegrity * (v->type == SpaceVessel::Type::Warship ? 2.0 : 0.5);
     }
     
     return attackStr / (defenseStr + 0.1);

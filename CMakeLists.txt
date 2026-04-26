@@ -16,7 +16,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -Wall -Wextra -Wpedantic")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
 
 # Find required packages
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets OpenGLWidgets)
 find_package(Vulkan REQUIRED)
 
 # Fetch nlohmann/json
@@ -182,6 +182,7 @@ target_link_libraries(hiersim PRIVATE
     Qt6::Core
     Qt6::Gui
     Qt6::Widgets
+    Qt6::OpenGLWidgets
     Vulkan::Vulkan
     nlohmann_json::nlohmann_json
 )

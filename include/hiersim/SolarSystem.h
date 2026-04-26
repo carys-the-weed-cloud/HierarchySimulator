@@ -81,7 +81,7 @@ struct SpaceInfrastructure {
         OrbitalRing      // Advanced orbital structure
     };
     
-    Type type = MiningOutpost;
+    Type type = Type::MiningOutpost;
     Location location;
     double capacity = 100.0;
     double efficiency = 1.0;
@@ -115,7 +115,7 @@ struct SpaceVessel {
         Tender            // Support vessel
     };
     
-    Type type = CargoShip;
+    Type type = Type::CargoShip;
     Location currentLocation;
     Location destinationLocation;
     double cargoCapacity = 1000.0;  // Tons
