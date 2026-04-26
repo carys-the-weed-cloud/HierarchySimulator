@@ -1,4 +1,5 @@
 #include "hiersim/ui/MapView.h"
+#include "hiersim/Simulation.h"
 #include "hiersim/WorldMap.h"
 #include <QOpenGLFunctions>
 #include <QPainter>
@@ -8,6 +9,7 @@ namespace hiersim::ui {
 MapView::MapView(QWidget *parent)
     : QOpenGLWidget(parent)
     , m_worldMap(nullptr)
+    , m_simulation(nullptr)
     , m_zoom(1.0f)
     , m_panX(0.0f)
     , m_panY(0.0f)
@@ -18,6 +20,14 @@ MapView::MapView(QWidget *parent)
 }
 
 MapView::~MapView() = default;
+
+void MapView::initialize(Simulation* simulation) {
+    m_simulation = simulation;
+    if (simulation && simulation->getScenario().worldMap) {
+        m_worldMap = simulation->getScenario().worldMap;
+        update();
+    }
+}
 
 void MapView::setWorldMap(std::shared_ptr<WorldMap> map) {
     m_worldMap = map;

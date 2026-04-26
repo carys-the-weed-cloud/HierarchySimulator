@@ -5,6 +5,7 @@
 #include <QFormLayout>
 #include <string>
 #include <memory>
+#include <optional>
 
 namespace hiersim {
     class Individual;
@@ -12,6 +13,7 @@ namespace hiersim {
     class Facility;
     class Unit;
     class WorldMap;
+    class Simulation;
 }
 
 namespace hiersim::ui {
@@ -28,9 +30,12 @@ namespace hiersim::ui {
         explicit EntityInspector(QWidget *parent = nullptr);
         ~EntityInspector();
 
+        void initialize(Simulation* simulation);
         void inspectEntity(const std::string& entityId);
         void inspectRegion(const std::string& regionId);
         void clear();
+        std::optional<std::string> getSelectedEntityId() const;
+        void refresh(const std::string& entityId);
 
     private:
         void setupUi();
@@ -47,5 +52,6 @@ namespace hiersim::ui {
         
         std::string m_currentEntityId;
         std::string m_currentRegionId;
+        Simulation* m_simulation = nullptr;
     };
 }

@@ -1,4 +1,5 @@
 #include "hiersim/ui/LogPanel.h"
+#include "hiersim/Simulation.h"
 #include <QDateTime>
 
 namespace hiersim::ui {
@@ -7,11 +8,20 @@ LogPanel::LogPanel(QWidget *parent)
     : QWidget(parent)
     , m_logText(nullptr)
     , m_layout(nullptr)
+    , m_simulation(nullptr)
 {
     setupUi();
 }
 
 LogPanel::~LogPanel() = default;
+
+void LogPanel::initialize(Simulation* simulation) {
+    m_simulation = simulation;
+}
+
+void LogPanel::addEntry(const QString& message) {
+    addLogEntry(message, false);
+}
 
 void LogPanel::setupUi() {
     m_layout = new QVBoxLayout(this);

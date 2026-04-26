@@ -1,4 +1,5 @@
 #include "hiersim/ui/EntityInspector.h"
+#include "hiersim/Simulation.h"
 #include "hiersim/Individual.h"
 #include "hiersim/Organization.h"
 #include "hiersim/Facility.h"
@@ -16,11 +17,29 @@ EntityInspector::EntityInspector(QWidget *parent)
     , m_propertyTree(nullptr)
     , m_regionTab(nullptr)
     , m_regionLayout(nullptr)
+    , m_simulation(nullptr)
 {
     setupUi();
 }
 
 EntityInspector::~EntityInspector() = default;
+
+void EntityInspector::initialize(Simulation* simulation) {
+    m_simulation = simulation;
+}
+
+std::optional<std::string> EntityInspector::getSelectedEntityId() const {
+    if (!m_currentEntityId.empty()) {
+        return m_currentEntityId;
+    }
+    return std::nullopt;
+}
+
+void EntityInspector::refresh(const std::string& entityId) {
+    if (!entityId.empty()) {
+        inspectEntity(entityId);
+    }
+}
 
 void EntityInspector::setupUi() {
     auto* layout = new QVBoxLayout(this);

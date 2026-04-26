@@ -127,11 +127,12 @@ std::unique_ptr<Scenario> ScenarioManager::getDefaultScenario() {
     // If no default exists, create one
     if (!scenario) {
         scenario = std::make_unique<Scenario>();
-        scenario->getMetadata().name = "Default";
-        scenario->getMetadata().description = "Default starting scenario";
-        scenario->getMetadata().author = "System";
-        scenario->getMetadata().difficulty = "Medium";
-        scenario->getMetadata().startingYear = 2024;
+        auto& meta = const_cast<ScenarioMetadata&>(scenario->getMetadata());
+        meta.name = "Default";
+        meta.description = "Default starting scenario";
+        meta.author = "System";
+        meta.difficulty = "Medium";
+        meta.startingYear = 2024;
     }
     
     return scenario;
@@ -139,7 +140,7 @@ std::unique_ptr<Scenario> ScenarioManager::getDefaultScenario() {
 
 Scenario ScenarioManager::createNewScenario(const std::string& name) {
     ScenarioMetadata metadata;
-    metadata.id = 0;  // Will be assigned by Scenario constructor
+    metadata.id = "";  // Will be assigned by Scenario constructor
     metadata.name = name;
     metadata.description = "Custom scenario";
     metadata.author = "Player";
@@ -243,8 +244,8 @@ std::unique_ptr<ScenarioMetadata> ScenarioManager::loadMetadataFromFile(const st
     }
     
     // Generate ID if not present
-    if (metadata->id == 0) {
-        metadata->id = std::hash<std::string>{}(filepath);
+    if (metadata->id.empty()) {
+        metadata->id = std::to_string(std::hash<std::string>{}(filepath));
     }
     
     return metadata;

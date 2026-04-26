@@ -4,6 +4,7 @@
 #include "hiersim/ui/TimeControlWidget.h"
 #include "hiersim/ui/LogPanel.h"
 #include "hiersim/Simulation.h"
+
 #include <QMenuBar>
 #include <QMenu>
 #include <QAction>
@@ -14,110 +15,131 @@
 #include <QApplication>
 #include <QFileDialog>
 #include <QMessageBox>
-#include <QLabel>
 
 namespace hiersim::ui {
 
-MainWindow::MainWindow(std::shared_ptr<Simulation> sim, QWidget *parent)
+MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , m_simulation(sim)
-    , m_mapView(nullptr)
-    , m_centerStack(nullptr)
-    , m_entityInspector(nullptr)
-    , m_logPanel(nullptr)
-    , m_timeControl(nullptr)
-    , m_isFullScreen(false)
+    , mapView_(nullptr)
+    , timeControlWidget_(nullptr)
+    , entityInspector_(nullptr)
+    , logPanel_(nullptr)
+    , tickCountLabel_(nullptr)
+    , speedLabel_(nullptr)
+    , stateLabel_(nullptr)
+    , fileMenu_(nullptr)
+    , simulationMenu_(nullptr)
+    , viewMenu_(nullptr)
+    , helpMenu_(nullptr)
+    , fileToolBar_(nullptr)
+    , simulationToolBar_(nullptr)
 {
     setWindowTitle("Hierarchy Simulator");
     setMinimumSize(1280, 720);
     
-    setupUi();
-    setupMenuBar();
-    setupStatusBar();
+    createMenus();
+    createToolBars();
+    createDockWidgets();
+    createStatusBar();
     connectSignals();
 }
 
 MainWindow::~MainWindow() = default;
 
-void MainWindow::setupUi() {
-    // Create central map view
-    m_mapView = new MapView(this);
+void MainWindow::initialize(Simulation* simulation) {
+    simulation_ = simulation;
     
-    m_centerStack = new QStackedWidget(this);
-    m_centerStack->addWidget(m_mapView);
-    setCentralWidget(m_centerStack);
-    
-    // Create time control widget
-    m_timeControl = new TimeControlWidget(this);
-    QToolBar* timeToolbar = addToolBar("Time Control");
-    timeToolbar->addWidget(m_timeControl);
-    timeToolbar->setMovable(false);
-    
-    // Create entity inspector dock
-    m_entityInspector = new EntityInspector(this);
-    QDockWidget* inspectorDock = new QDockWidget("Entity Inspector", this);
-    inspectorDock->setWidget(m_entityInspector);
-    addDockWidget(Qt::RightDockWidgetArea, inspectorDock);
-    
-    // Create log panel dock
-    m_logPanel = new LogPanel(this);
-    QDockWidget* logDock = new QDockWidget("Event Log", this);
-    logDock->setWidget(m_logPanel);
-    addDockWidget(Qt::BottomDockWidgetArea, logDock);
+    // Initialize UI components with simulation data
+    if (mapView_) {
+        mapView_->initialize(simulation);
+    }
+    if (entityInspector_) {
+        entityInspector_->initialize(simulation);
+    }
+    if (logPanel_) {
+        logPanel_->initialize(simulation);
+    }
 }
 
-void MainWindow::setupMenuBar() {
+std::optional<std::string> MainWindow::getSelectedEntityId() const {
+    if (entityInspector_) {
+        return entityInspector_->getSelectedEntityId();
+    }
+    return std::nullopt;
+}
+
+void MainWindow::refreshEntityInspector(const std::string& entityId) {
+    if (entityInspector_) {
+        entityInspector_->refresh(entityId);
+    }
+}
+
+void MainWindow::updateMapView() {
+    if (mapView_) {
+        mapView_->update();
+    }
+}
+
+void MainWindow::updateTickCount(int count) {
+    if (tickCountLabel_) {
+        tickCountLabel_->setText(QString("Tick: %1").arg(count));
+    }
+}
+
+void MainWindow::updateSimulationState(bool running) {
+    if (stateLabel_) {
+        stateLabel_->setText(running ? "Running" : "Paused");
+    }
+}
+
+void MainWindow::addLogEntry(const QString& message) {
+    if (logPanel_) {
+        logPanel_->addEntry(message);
+    }
+}
+
+void MainWindow::createMenus() {
     // File menu
-    QMenu* fileMenu = menuBar()->addMenu("&File");
+    fileMenu_ = menuBar()->addMenu("&File");
     
-    QAction* loadAction = fileMenu->addAction("&Load Scenario...");
+    QAction* loadAction = fileMenu_->addAction("&Load Scenario...");
     loadAction->setShortcut(QKeySequence::Open);
-    connect(loadAction, &QAction::triggered, this, &MainWindow::loadScenario);
+    connect(loadAction, &QAction::triggered, [this]() {
+        emit loadScenarioRequested("");
+    });
     
-    QAction* saveAction = fileMenu->addAction("&Save Scenario");
+    QAction* saveAction = fileMenu_->addAction("&Save Scenario");
     saveAction->setShortcut(QKeySequence::Save);
-    connect(saveAction, &QAction::triggered, this, &MainWindow::saveScenario);
+    connect(saveAction, &QAction::triggered, [this]() {
+        emit saveScenarioRequested("");
+    });
     
-    fileMenu->addSeparator();
+    fileMenu_->addSeparator();
     
-    QAction* exitAction = fileMenu->addAction("E&xit");
+    QAction* exitAction = fileMenu_->addAction("E&xit");
     exitAction->setShortcut(QKeySequence::Quit);
     connect(exitAction, &QAction::triggered, qApp, &QApplication::quit);
     
     // Simulation menu
-    QMenu* simMenu = menuBar()->addMenu("&Simulation");
-    
-    QAction* playAction = simMenu->addAction("&Play");
-    playAction->setShortcut(QKeySequence(Qt::Key_Space));
-    connect(playAction, &QAction::triggered, [this]() {
-        if (m_simulation) m_simulation->setRunning(true);
-    });
-    
-    QAction* pauseAction = simMenu->addAction("P&ause");
-    pauseAction->setShortcut(QKeySequence(Qt::Key_P));
-    connect(pauseAction, &QAction::triggered, [this]() {
-        if (m_simulation) m_simulation->setRunning(false);
-    });
-    
-    simMenu->addSeparator();
-    
-    QAction* stepAction = simMenu->addAction("Step &Forward");
-    stepAction->setShortcut(QKeySequence(Qt::Key_F));
-    connect(stepAction, &QAction::triggered, [this]() {
-        if (m_simulation) m_simulation->step();
-    });
+    simulationMenu_ = menuBar()->addMenu("&Simulation");
     
     // View menu
-    QMenu* viewMenu = menuBar()->addMenu("&View");
+    viewMenu_ = menuBar()->addMenu("&View");
     
-    QAction* fullScreenAction = viewMenu->addAction("&Full Screen");
+    QAction* fullScreenAction = viewMenu_->addAction("&Full Screen");
     fullScreenAction->setShortcut(QKeySequence::FullScreen);
-    connect(fullScreenAction, &QAction::triggered, this, &MainWindow::toggleFullScreen);
+    connect(fullScreenAction, &QAction::triggered, [this]() {
+        if (isFullScreen()) {
+            showNormal();
+        } else {
+            showFullScreen();
+        }
+    });
     
     // Help menu
-    QMenu* helpMenu = menuBar()->addMenu("&Help");
+    helpMenu_ = menuBar()->addMenu("&Help");
     
-    QAction* aboutAction = helpMenu->addAction("&About");
+    QAction* aboutAction = helpMenu_->addAction("&About");
     connect(aboutAction, &QAction::triggered, [this]() {
         QMessageBox::about(this, "About Hierarchy Simulator",
             "Hierarchy Simulator v0.1\n\n"
@@ -126,103 +148,75 @@ void MainWindow::setupMenuBar() {
     });
 }
 
-void MainWindow::setupStatusBar() {
+void MainWindow::createToolBars() {
+    // File toolbar
+    fileToolBar_ = addToolBar("File");
+    fileToolBar_->setMovable(false);
+    
+    // Simulation toolbar with time control
+    simulationToolBar_ = addToolBar("Simulation");
+    simulationToolBar_->setMovable(false);
+    
+    timeControlWidget_ = new TimeControlWidget(this);
+    simulationToolBar_->addWidget(timeControlWidget_);
+}
+
+void MainWindow::createDockWidgets() {
+    // Create central map view
+    mapView_ = new MapView(this);
+    setCentralWidget(mapView_);
+    
+    // Create entity inspector dock
+    entityInspector_ = new EntityInspector(this);
+    QDockWidget* inspectorDock = new QDockWidget("Entity Inspector", this);
+    inspectorDock->setWidget(entityInspector_);
+    addDockWidget(Qt::RightDockWidgetArea, inspectorDock);
+    
+    // Create log panel dock
+    logPanel_ = new LogPanel(this);
+    QDockWidget* logDock = new QDockWidget("Event Log", this);
+    logDock->setWidget(logPanel_);
+    addDockWidget(Qt::BottomDockWidgetArea, logDock);
+}
+
+void MainWindow::createStatusBar() {
     QStatusBar* status = statusBar();
     
-    QLabel* tickLabel = new QLabel("Tick: 0");
-    status->addPermanentWidget(tickLabel);
+    tickCountLabel_ = new QLabel("Tick: 0");
+    status->addPermanentWidget(tickCountLabel_);
     
-    QLabel* speedLabel = new QLabel("Speed: 1x");
-    status->addPermanentWidget(speedLabel);
+    speedLabel_ = new QLabel("Speed: 1x");
+    status->addPermanentWidget(speedLabel_);
     
-    QLabel* stateLabel = new QLabel("Paused");
-    status->addPermanentWidget(stateLabel);
-    
-    // Connect to simulation updates
-    if (m_simulation) {
-        connect(m_simulation.get(), &Simulation::tickChanged, 
-            [tickLabel](int tick) { tickLabel->setText(QString("Tick: %1").arg(tick)); });
-        connect(m_simulation.get(), &Simulation::speedChanged,
-            [speedLabel](int speed) { speedLabel->setText(QString("Speed: %1x").arg(speed)); });
-        connect(m_simulation.get(), &Simulation::stateChanged,
-            [stateLabel](bool running) { stateLabel->setText(running ? "Running" : "Paused"); });
-    }
+    stateLabel_ = new QLabel("Paused");
+    status->addPermanentWidget(stateLabel_);
 }
 
 void MainWindow::connectSignals() {
-    // Time control signals
-    connect(m_timeControl, &TimeControlWidget::speedChanged,
-        this, &MainWindow::onSpeedChanged);
-    connect(m_timeControl, &TimeControlWidget::playToggled,
-        this, &MainWindow::onSimulationToggled);
+    // Connect time control signals
+    if (timeControlWidget_) {
+        connect(timeControlWidget_, &TimeControlWidget::speedChanged,
+            [this](int ticksPerSecond) {
+                if (speedLabel_) {
+                    speedLabel_->setText(QString("Speed: %1x").arg(ticksPerSecond));
+                }
+            });
+    }
     
-    // Map view signals
-    connect(m_mapView, &MapView::regionSelected,
-        this, &MainWindow::onRegionSelected);
-    connect(m_mapView, &MapView::entitySelected,
-        this, &MainWindow::onEntitySelected);
-    
-    // Tick timer
-    connect(&m_tickTimer, &QTimer::timeout, this, &MainWindow::onTick);
-    m_tickTimer.setInterval(1000); // Default 1 tick per second
-    m_tickTimer.start();
-}
-
-void MainWindow::onTick() {
-    if (m_simulation && m_simulation->isRunning()) {
-        m_simulation->tick();
-    }
-}
-
-void MainWindow::onSpeedChanged(int ticksPerSecond) {
-    if (m_simulation) {
-        m_simulation->setSpeed(ticksPerSecond);
-        m_tickTimer.setInterval(1000 / ticksPerSecond);
-    }
-}
-
-void MainWindow::onSimulationToggled(bool running) {
-    if (m_simulation) {
-        m_simulation->setRunning(running);
-    }
-}
-
-void MainWindow::onRegionSelected(const std::string& regionId) {
-    if (m_entityInspector) {
-        m_entityInspector->inspectRegion(regionId);
-    }
-}
-
-void MainWindow::onEntitySelected(const std::string& entityId) {
-    if (m_entityInspector) {
-        m_entityInspector->inspectEntity(entityId);
-    }
-}
-
-void MainWindow::loadScenario() {
-    QString fileName = QFileDialog::getOpenFileName(
-        this, "Load Scenario", "", "Scenario Files (*.scenario);;All Files (*)");
-    
-    if (!fileName.isEmpty() && m_simulation) {
-        m_simulation->loadScenario(fileName.toStdString());
-    }
-}
-
-void MainWindow::saveScenario() {
-    QString fileName = QFileDialog::getSaveFileName(
-        this, "Save Scenario", "", "Scenario Files (*.scenario);;All Files (*)");
-    
-    if (!fileName.isEmpty() && m_simulation) {
-        m_simulation->saveScenario(fileName.toStdString());
-    }
-}
-
-void MainWindow::toggleFullScreen() {
-    m_isFullScreen = !m_isFullScreen;
-    if (m_isFullScreen) {
-        showFullScreen();
-    } else {
-        showNormal();
+    // Connect map view signals
+    if (mapView_) {
+        connect(mapView_, &MapView::regionSelected,
+            [this](const std::string& regionId) {
+                if (entityInspector_) {
+                    entityInspector_->inspectRegion(regionId);
+                }
+            });
+        connect(mapView_, &MapView::entitySelected,
+            [this](const std::string& entityId) {
+                if (entityInspector_) {
+                    entityInspector_->inspectEntity(entityId);
+                }
+            });
     }
 }
 

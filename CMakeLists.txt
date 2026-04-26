@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.28)
+cmake_minimum_required(VERSION 3.20)
 project(HierarchySimulator VERSION 0.1.0 LANGUAGES CXX)
 
 # Set C++23 standard
@@ -103,6 +103,11 @@ set(UI_SOURCES
     src/ui/HierarchyView.cpp
 )
 
+# Source files for integration
+set(INTEGRATION_SOURCES
+    src/integration/SimulationController.cpp
+)
+
 # Source files for graphics
 set(GRAPHICS_SOURCES
     src/graphics/VulkanRenderer.cpp
@@ -151,6 +156,7 @@ set(HEADERS
     include/hiersim/ObjectInspector.h
     include/hiersim/Dashboard.h
     include/hiersim/HierarchyView.h
+    include/hiersim/SimulationController.h
     include/hiersim/VulkanRenderer.h
     include/hiersim/VulkanContext.h
     include/hiersim/Shaders.h
@@ -172,6 +178,7 @@ add_executable(hiersim
     ${WORLD_SOURCES}
     ${SPACE_SOURCES}
     ${UI_SOURCES}
+    ${INTEGRATION_SOURCES}
     ${GRAPHICS_SOURCES}
     ${UTILS_SOURCES}
     ${HEADERS}

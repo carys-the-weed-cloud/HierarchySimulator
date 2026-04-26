@@ -1,9 +1,9 @@
 #pragma once
 
+#include "ui/MainWindow.h"
 #include "Simulation.h"
 #include "TimeController.h"
 #include "ScenarioManager.h"
-#include "MainWindow.h"
 
 #include <QObject>
 #include <QTimer>

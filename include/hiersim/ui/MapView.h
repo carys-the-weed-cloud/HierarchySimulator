@@ -7,6 +7,7 @@
 
 namespace hiersim {
     class WorldMap;
+    class Simulation;
 }
 
 namespace hiersim::ui {
@@ -23,6 +24,7 @@ namespace hiersim::ui {
         explicit MapView(QWidget *parent = nullptr);
         ~MapView();
 
+        void initialize(Simulation* simulation);
         void setWorldMap(std::shared_ptr<WorldMap> map);
 
     signals:
@@ -43,6 +45,7 @@ namespace hiersim::ui {
         void renderConnections();
         
         std::shared_ptr<WorldMap> m_worldMap;
+        Simulation* m_simulation = nullptr;
         
         // Camera state
         float m_zoom;
