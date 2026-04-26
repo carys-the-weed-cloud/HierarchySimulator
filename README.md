@@ -2,6 +2,8 @@
 
 ## A Tick-Based Simulation of Alternate Worlds
 
+![CMake Build Checker](https://github.com/carys-the-weed-cloud/HierarchySimulator/actions/workflows/cmake-build.yml/badge.svg)
+
 A Linux-based C++23, Qt6, Vulkan, and CMake-powered simulation game inspired by **Shadow Empire**, **Victoria 3**, **Democracy 3**, and **Terra Invicta**. Track, observe, follow, adjust, and dismantle hierarchies around the world to shape societies according to your vision.
 
 ---
