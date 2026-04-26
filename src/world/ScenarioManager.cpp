@@ -126,12 +126,15 @@ std::unique_ptr<Scenario> ScenarioManager::getDefaultScenario() {
     
     // If no default exists, create one
     if (!scenario) {
-        scenario = std::make_unique<Scenario>();
-        scenario->getMetadata().name = "Default";
-        scenario->getMetadata().description = "Default starting scenario";
-        scenario->getMetadata().author = "System";
-        scenario->getMetadata().difficulty = "Medium";
-        scenario->getMetadata().startingYear = 2024;
+        ScenarioMetadata metadata;
+        metadata.id = 0;
+        metadata.name = "Default";
+        metadata.description = "Default starting scenario";
+        metadata.author = "System";
+        metadata.difficulty = "Medium";
+        metadata.startingYear = 2024;
+        metadata.startingTick = 0;
+        scenario = std::make_unique<Scenario>(metadata);
     }
     
     return scenario;
