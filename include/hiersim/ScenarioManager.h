@@ -42,7 +42,7 @@ public:
      * @param scenarioId ID of the scenario to load
      * @return Loaded scenario, nullptr if not found
      */
-    std::unique_ptr<Scenario> loadScenario(uint64_t scenarioId);
+    std::unique_ptr<Scenario> loadScenario(std::string scenarioId);
     
     /**
      * @brief Load a scenario by name
@@ -88,7 +88,7 @@ public:
 private:
     std::string scenariosDir_;
     std::vector<ScenarioMetadata> catalog_;
-    std::map<uint64_t, std::string> scenarioFiles_;  // ID -> filename mapping
+    std::map<std::string, std::string> scenarioFiles_;  // ID -> filename mapping
     
     /**
      * @brief Load scenario metadata from a file

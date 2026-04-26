@@ -564,7 +564,7 @@ bool SolarSystem::attemptColonization(const std::string& bodyId, const std::stri
     
     // Create initial base
     SpaceInfrastructure base;
-    base.id = "base_" + bodyId + "_" + std::to_string(Random::getInstance().nextInt(0, 10000));
+    base.id = "base_" + bodyId + "_" + std::to_string(Random::instance().nextInt(0, 10000));
     base.name = body->name + " Outpost";
     base.ownerId = orgId;
     base.type = SpaceInfrastructure::Type::MiningOutpost;
@@ -650,7 +650,7 @@ std::string SolarSystem::serialize() const {
             case CelestialBodyType::Asteroid: return "Asteroid";
             case CelestialBodyType::DwarfPlanet: return "DwarfPlanet";
             case CelestialBodyType::Comet: return "Comet";
-            case CelestialBodyType::SpaceHabitat: return "SpaceHabitat";
+            case CelestialBodyType::OrbitalHabitat: return "OrbitalHabitat";
             default: return "Unknown";
         }
     };

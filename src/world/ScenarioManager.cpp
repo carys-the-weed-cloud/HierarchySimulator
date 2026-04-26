@@ -57,7 +57,7 @@ int ScenarioManager::scanForScenarios() {
     return count;
 }
 
-std::unique_ptr<Scenario> ScenarioManager::loadScenario(uint64_t scenarioId) {
+std::unique_ptr<Scenario> ScenarioManager::loadScenario(std::string scenarioId) {
     auto it = scenarioFiles_.find(scenarioId);
     if (it == scenarioFiles_.end()) {
         return nullptr;
