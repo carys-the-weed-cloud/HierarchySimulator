@@ -4,6 +4,7 @@
 #include <QSlider>
 #include <QPushButton>
 #include <QLCDNumber>
+#include <QLabel>
 
 namespace hiersim::ui {
     /**
