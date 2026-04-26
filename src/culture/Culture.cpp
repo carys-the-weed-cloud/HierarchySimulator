@@ -144,16 +144,24 @@ std::shared_ptr<Culture> Culture::deserialize(const std::string& data) {
     auto culture = std::make_shared<Culture>();
     
     // Simple parsing - in production use proper parser
-    culture->name_ = StringUtils::extractValue(data, "name:");
+    auto parseValue = [](const std::string& text, const std::string& key) -> std::string {
+        size_t pos = text.find(key);
+        if (pos == std::string::npos) return "";
+        size_t start = pos + key.length();
+        size_t end = text.find('\n', start);
+        if (end == std::string::npos) end = text.length();
+        return text.substr(start, end - start);
+    };
+    culture->name_ = parseValue(data, "name:");
     
-    culture->traits_.individualism = std::stof(StringUtils::extractValue(data, "individualism:"));
-    culture->traits_.tradition = std::stof(StringUtils::extractValue(data, "tradition:"));
-    culture->traits_.innovation = std::stof(StringUtils::extractValue(data, "innovation:"));
-    culture->traits_.hierarchy = std::stof(StringUtils::extractValue(data, "hierarchy:"));
-    culture->traits_.materialism = std::stof(StringUtils::extractValue(data, "materialism:"));
-    culture->traits_.risk_tolerance = std::stof(StringUtils::extractValue(data, "risk_tolerance:"));
-    culture->traits_.long_term_orientation = std::stof(StringUtils::extractValue(data, "long_term_orientation:"));
-    culture->traits_.universalism = std::stof(StringUtils::extractValue(data, "universalism:"));
+    culture->traits_.individualism = std::stof(parseValue(data, "individualism:"));
+    culture->traits_.tradition = std::stof(parseValue(data, "tradition:"));
+    culture->traits_.innovation = std::stof(parseValue(data, "innovation:"));
+    culture->traits_.hierarchy = std::stof(parseValue(data, "hierarchy:"));
+    culture->traits_.materialism = std::stof(parseValue(data, "materialism:"));
+    culture->traits_.risk_tolerance = std::stof(parseValue(data, "risk_tolerance:"));
+    culture->traits_.long_term_orientation = std::stof(parseValue(data, "long_term_orientation:"));
+    culture->traits_.universalism = std::stof(parseValue(data, "universalism:"));
     
     return culture;
 }

@@ -70,178 +70,178 @@ std::string Law::enforcementToString(EnforcementLevel level) {
 void LegalSystem::initializeDefaultLaws() {
     // Economic laws
     laws_["private_property"] = Law{
-        .id = "private_property",
-        .name = "Private Property Rights",
-        .description = "Legal protection of private ownership",
-        .category = LawCategory::Economic,
-        .economic_impact = 0.2f,
-        .freedom_impact = 0.1f,
-        .stability_impact = 0.1f,
-        .implementation_cost = 10,
+        .id = "private_property"
+        .name = "Private Property Rights"
+        .description = "Legal protection of private ownership"
+        .category = LawCategory::Economic
+        .economic_impact = 0.2f
+        .freedom_impact = 0.1f
+        .stability_impact = 0.1f
+        .implementation_cost = 10
         .enforcement_capacity_needed = 5
-    };
+
     
     laws_["progressive_taxation"] = Law{
-        .id = "progressive_taxation",
-        .name = "Progressive Taxation",
-        .description = "Tax rates increase with income",
-        .category = LawCategory::Economic,
-        .economic_impact = -0.1f,
-        .freedom_impact = -0.1f,
-        .popularity_impact = 0.2f,
-        .implementation_cost = 20,
-        .maintenance_cost = 5,
+        .id = "progressive_taxation"
+        .name = "Progressive Taxation"
+        .description = "Tax rates increase with income"
+        .category = LawCategory::Economic
+        .economic_impact = -0.1f
+        .freedom_impact = -0.1f
+        .popularity_impact = 0.2f
+        .implementation_cost = 20
+        .maintenance_cost = 5
         .enforcement_capacity_needed = 10
-    };
+
     
     laws_["minimum_wage"] = Law{
-        .id = "minimum_wage",
-        .name = "Minimum Wage Law",
-        .description = "Legal minimum hourly wage",
-        .category = LawCategory::Economic,
-        .economic_impact = -0.05f,
-        .freedom_impact = -0.1f,
-        .popularity_impact = 0.15f,
-        .stability_impact = 0.1f,
-        .implementation_cost = 15,
-        .maintenance_cost = 3,
+        .id = "minimum_wage"
+        .name = "Minimum Wage Law"
+        .description = "Legal minimum hourly wage"
+        .category = LawCategory::Economic
+        .economic_impact = -0.05f
+        .freedom_impact = -0.1f
+        .stability_impact = 0.1f
+        .popularity_impact = 0.15f
+        .implementation_cost = 15
+        .maintenance_cost = 3
         .enforcement_capacity_needed = 8
-    };
+
     
     laws_["universal_basic_income"] = Law{
-        .id = "universal_basic_income",
-        .name = "Universal Basic Income",
-        .description = "Guaranteed income for all citizens",
-        .category = LawCategory::Economic,
-        .economic_impact = -0.2f,
-        .freedom_impact = 0.2f,
-        .popularity_impact = 0.3f,
-        .stability_impact = 0.2f,
-        .implementation_cost = 50,
-        .maintenance_cost = 100,
+        .id = "universal_basic_income"
+        .name = "Universal Basic Income"
+        .description = "Guaranteed income for all citizens"
+        .category = LawCategory::Economic
         .required_technologies = {"basic_computing"}
-    };
+        .economic_impact = -0.2f
+        .freedom_impact = 0.2f
+        .stability_impact = 0.2f
+        .popularity_impact = 0.3f
+        .implementation_cost = 50
+        .maintenance_cost = 100
+
     
     // Social laws
     laws_["free_education"] = Law{
-        .id = "free_education",
-        .name = "Free Public Education",
-        .description = "Government-funded education for all",
-        .category = LawCategory::Social,
-        .economic_impact = -0.1f,
-        .freedom_impact = 0.1f,
-        .popularity_impact = 0.2f,
-        .stability_impact = 0.1f,
-        .implementation_cost = 40,
-        .maintenance_cost = 30,
+        .id = "free_education"
+        .name = "Free Public Education"
+        .description = "Government-funded education for all"
+        .category = LawCategory::Social
+        .economic_impact = -0.1f
+        .freedom_impact = 0.1f
+        .stability_impact = 0.1f
+        .popularity_impact = 0.2f
+        .implementation_cost = 40
+        .maintenance_cost = 30
         .enforcement_capacity_needed = 5
-    };
+
     
     laws_["universal_healthcare"] = Law{
-        .id = "universal_healthcare",
-        .name = "Universal Healthcare",
-        .description = "Government-provided healthcare for all",
-        .category = LawCategory::Social,
-        .economic_impact = -0.15f,
-        .freedom_impact = 0.1f,
-        .popularity_impact = 0.25f,
-        .stability_impact = 0.15f,
-        .implementation_cost = 60,
-        .maintenance_cost = 50,
+        .id = "universal_healthcare"
+        .name = "Universal Healthcare"
+        .description = "Government-provided healthcare for all"
+        .category = LawCategory::Social
         .required_technologies = {"vaccination"}
-    };
+        .economic_impact = -0.15f
+        .freedom_impact = 0.1f
+        .stability_impact = 0.15f
+        .popularity_impact = 0.25f
+        .implementation_cost = 60
+        .maintenance_cost = 50
+
     
     laws_["civil_rights"] = Law{
-        .id = "civil_rights",
-        .name = "Civil Rights Act",
-        .description = "Protection against discrimination",
-        .category = LawCategory::Social,
-        .freedom_impact = 0.2f,
-        .popularity_impact = 0.15f,
-        .stability_impact = 0.1f,
-        .implementation_cost = 20,
-        .maintenance_cost = 5,
-        .enforcement_capacity_needed = 10,
+        .id = "civil_rights"
+        .name = "Civil Rights Act"
+        .description = "Protection against discrimination"
+        .category = LawCategory::Social
         .prohibited_ideologies = {"fascism"}
-    };
+        .freedom_impact = 0.2f
+        .stability_impact = 0.1f
+        .popularity_impact = 0.15f
+        .implementation_cost = 20
+        .maintenance_cost = 5
+        .enforcement_capacity_needed = 10
+
     
     // Political laws
     laws_["universal_suffrage"] = Law{
-        .id = "universal_suffrage",
-        .name = "Universal Suffrage",
-        .description = "Voting rights for all adult citizens",
-        .category = LawCategory::Political,
-        .freedom_impact = 0.2f,
-        .popularity_impact = 0.2f,
-        .stability_impact = 0.1f,
-        .implementation_cost = 15,
+        .id = "universal_suffrage"
+        .name = "Universal Suffrage"
+        .description = "Voting rights for all adult citizens"
+        .category = LawCategory::Political
+        .freedom_impact = 0.2f
+        .stability_impact = 0.1f
+        .popularity_impact = 0.2f
+        .implementation_cost = 15
         .enforcement_capacity_needed = 5
-    };
+
     
     laws_["freedom_of_press"] = Law{
-        .id = "freedom_of_press",
-        .name = "Freedom of the Press",
-        .description = "Protection of media independence",
-        .category = LawCategory::Political,
-        .freedom_impact = 0.25f,
-        .stability_impact = -0.1f,
-        .implementation_cost = 10,
+        .id = "freedom_of_press"
+        .name = "Freedom of the Press"
+        .description = "Protection of media independence"
+        .category = LawCategory::Political
         .prohibited_ideologies = {"fascism", "totalitarian_communism"}
-    };
+        .freedom_impact = 0.25f
+        .stability_impact = -0.1f
+        .implementation_cost = 10
+
     
     // Military laws
     laws_["conscription"] = Law{
-        .id = "conscription",
-        .name = "Military Conscription",
-        .description = "Mandatory military service",
-        .category = LawCategory::Military,
-        .economic_impact = -0.1f,
-        .freedom_impact = -0.3f,
-        .stability_impact = 0.1f,
-        .popularity_impact = -0.2f,
-        .implementation_cost = 20,
-        .maintenance_cost = 10,
+        .id = "conscription"
+        .name = "Military Conscription"
+        .description = "Mandatory military service"
+        .category = LawCategory::Military
+        .economic_impact = -0.1f
+        .freedom_impact = -0.3f
+        .stability_impact = 0.1f
+        .popularity_impact = -0.2f
+        .implementation_cost = 20
+        .maintenance_cost = 10
         .enforcement_capacity_needed = 15
-    };
+
     
     laws_["defense_budget_increase"] = Law{
-        .id = "defense_budget_increase",
-        .name = "Defense Budget Increase",
-        .description = "Increased military spending",
-        .category = LawCategory::Military,
-        .economic_impact = -0.15f,
-        .stability_impact = 0.15f,
-        .popularity_impact = 0.1f,
-        .maintenance_cost = 40,
+        .id = "defense_budget_increase"
+        .name = "Defense Budget Increase"
+        .description = "Increased military spending"
+        .category = LawCategory::Military
+        .economic_impact = -0.15f
+        .stability_impact = 0.15f
+        .popularity_impact = 0.1f
         .implementation_cost = 30
-    };
+        .maintenance_cost = 40
+
     
     // Environmental laws
     laws_["carbon_tax"] = Law{
-        .id = "carbon_tax",
-        .name = "Carbon Tax",
-        .description = "Tax on carbon emissions",
-        .category = LawCategory::Environmental,
-        .economic_impact = -0.1f,
-        .freedom_impact = -0.05f,
-        .popularity_impact = 0.1f,
-        .implementation_cost = 25,
-        .maintenance_cost = 5,
-        .enforcement_capacity_needed = 10,
+        .id = "carbon_tax"
+        .name = "Carbon Tax"
+        .description = "Tax on carbon emissions"
+        .category = LawCategory::Environmental
         .required_technologies = {"electricity"}
-    };
+        .economic_impact = -0.1f
+        .freedom_impact = -0.05f
+        .popularity_impact = 0.1f
+        .implementation_cost = 25
+        .maintenance_cost = 5
+        .enforcement_capacity_needed = 10
+
     
     laws_["renewable_energy_subsidy"] = Law{
-        .id = "renewable_energy_subsidy",
-        .name = "Renewable Energy Subsidies",
-        .description = "Government support for clean energy",
-        .category = LawCategory::Environmental,
-        .economic_impact = -0.1f,
-        .popularity_impact = 0.15f,
-        .implementation_cost = 40,
-        .maintenance_cost = 20,
+        .id = "renewable_energy_subsidy"
+        .name = "Renewable Energy Subsidies"
+        .description = "Government support for clean energy"
+        .category = LawCategory::Environmental
         .required_technologies = {"nuclear_power"}
-    };
+        .economic_impact = -0.1f
+        .popularity_impact = 0.15f
+        .implementation_cost = 40
+        .maintenance_cost = 20
+
 }
 
 const Law* LegalSystem::getLaw(const std::string& id) const {

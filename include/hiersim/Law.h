@@ -2,6 +2,7 @@
 #define HIERSIM_LAW_H
 
 #include <string>
+#include <functional>
 #include <vector>
 #include <map>
 #include <set>
