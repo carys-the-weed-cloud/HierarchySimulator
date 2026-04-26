@@ -16,6 +16,11 @@ From cyberpunk dystopias controlled by vertically integrated exploitative corpor
 - **Emergent Complexity**: Watch complex social dynamics emerge from simple rules
 - **Path to the Stars**: Guide civilizations from terrestrial politics to solar system colonization
 
+### Time System
+- **Tick-Based Simulation**: 1 tick = 1 day in-game time
+- **Speed Control**: Player can adjust simulation speed from 1 tick/second (optimal) up to 6 ticks/second (maximum)
+- **Pause & Step**: Full control to pause, step forward one tick at a time, or run at variable speeds
+
 ---
 
 ## 🏗️ Core Simulation Objects
@@ -71,6 +76,8 @@ The masses represented statistically rather than as individual agents, providing
 | **Target Platform** | Linux |
 | **Simulation Engine** | Custom ECS-based architecture |
 | **Economic Model** | Post-Keynesian with Marxist dynamics |
+| **Target Hardware** | RTX 2080, 32GB RAM, i7-8700K |
+| **Optimization Focus** | GPU-accelerated rendering, multi-threaded simulation, efficient memory management |
 
 ---
 
@@ -150,7 +157,13 @@ The masses represented statistically rather than as individual agents, providing
 ### Phase 4: World Generation & Initialization (Weeks 15-18)
 **Goal**: Create an alternate pre-built world
 
-- [ ] Design world map system (abstract or geographic)
+- [x] Design world map system (abstract or geographic)
+- [x] Implement Region struct with terrain, climate, resources, infrastructure
+- [x] Create WorldMap class with region management
+- [x] Implement pathfinding (Dijkstra's algorithm)
+- [x] Add distance calculations (Haversine formula)
+- [x] Implement region ownership and transfer mechanics
+- [x] Add serialization/deserialization support
 - [ ] Generate initial distribution of Individuals
 - [ ] Populate world with starting Organizations
 - [ ] Place initial Facilities
@@ -159,25 +172,35 @@ The masses represented statistically rather than as individual agents, providing
 - [ ] Build historical backstory generation
 
 **Deliverables**:
-- Procedurally generated starting worlds
-- Save/load system for world states
-- At least one hand-crafted scenario
+- [x] WorldMap and Region classes with full implementation
+- [x] Pathfinding and distance calculation systems
+- [x] Region ownership mechanics
+- [ ] Procedurally generated starting worlds
+- [ ] Save/load system for world states
+- [ ] At least one hand-crafted scenario
+
+**Status**: 🔄 IN PROGRESS (Core map system complete, generation pending)
 
 ### Phase 5: Simulation Loop & Time System (Weeks 19-22)
 **Goal**: Make the world run and evolve
 
-- [ ] Implement discrete time step system (daily/weekly/monthly)
+- [ ] Implement discrete time step system (1 tick = 1 day)
 - [ ] Create event scheduling and resolution
 - [ ] Build decision queues for Individuals and Organizations
 - [ ] Implement conflict resolution systems
 - [ ] Create feedback loops between economy and politics
 - [ ] Design crisis and tipping point detection
 - [ ] Build statistical tracking and aggregation
+- [ ] Implement player speed control (1-6 ticks/second)
+- [ ] Add pause, play, and step-forward controls
+- [ ] Optimize for target hardware (RTX 2080, i7-8700K, 32GB RAM)
 
 **Deliverables**:
 - Running simulation that evolves over time
 - Basic AI for autonomous actors
 - Replay and observation tools
+- Variable speed control UI
+- Performance benchmarks for target hardware
 
 ### Phase 6: User Interface & Interaction (Weeks 23-28)
 **Goal**: Allow players to interact with the simulation
